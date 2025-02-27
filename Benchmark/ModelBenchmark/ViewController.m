@@ -16,6 +16,7 @@
 #import "JSWeiboModel.h"
 #import "MJWeiboModel.h"
 #import "ModelBenchmark-Swift.h"
+@import XZJSON;
 
 @implementation ViewController
 
@@ -73,6 +74,9 @@
             
             // MJExtension
             [MJGHUser mj_objectWithKeyValues:json];
+            
+            // XZJSON
+            [XZJSON decode:json options:kNilOptions class:[XZGHUser class]];
         }
     }
     /// warm up holder
@@ -386,7 +390,56 @@
         printf("%8.2f\n", (end - begin) * 1000);
     }
     
-    
+    /*------------------- XZJSON -------------------*/
+    {
+        [holder removeAllObjects];
+        begin = CACurrentMediaTime();
+        @autoreleasepool {
+            for (int i = 0; i < count; i++) {
+                XZGHUser *user = [XZJSON decode:json options:kNilOptions class:[XZGHUser class]];
+                [holder addObject:user];
+            }
+        }
+        end = CACurrentMediaTime();
+        printf("XZJSON(#):          %8.2f   ", (end - begin) * 1000);
+        
+        
+        XZGHUser *user = [XZJSON decode:json options:kNilOptions class:[XZGHUser class]];
+        if (user.userID == 0) NSLog(@"error!");
+        if (!user.login) NSLog(@"error!");
+        if (!user.htmlURL) NSLog(@"error");
+        
+        [holder removeAllObjects];
+        begin = CACurrentMediaTime();
+        @autoreleasepool {
+            for (int i = 0; i < count; i++) {
+                NSMutableDictionary *json = [NSMutableDictionary dictionary];
+                [XZJSON model:user encodeIntoDictionary:json];
+                [holder addObject:json];
+            }
+        }
+        end = CACurrentMediaTime();
+        
+        NSMutableDictionary *json = [NSMutableDictionary dictionary];
+        [XZJSON model:user encodeIntoDictionary:json];
+        if ([NSJSONSerialization isValidJSONObject:json]) {
+            printf("%8.2f   ", (end - begin) * 1000);
+        } else {
+            printf("   error   ");
+        }
+        
+        
+        [holder removeAllObjects];
+        begin = CACurrentMediaTime();
+        @autoreleasepool {
+            for (int i = 0; i < count; i++) {
+                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:user];
+                [holder addObject:data];
+            }
+        }
+        end = CACurrentMediaTime();
+        printf("%8.2f\n", (end - begin) * 1000);
+    }
     
     
     /// Benchmark swift
@@ -435,6 +488,9 @@
             
             // MJExtension
             [MJWeiboStatus mj_objectWithKeyValues:json];
+            
+            // XZJSON
+            [XZJSON decode:json options:kNilOptions class:[XZWeiboStatus class]];
         }
     }
     
@@ -639,6 +695,53 @@
         } else {
             printf("   error   ");
         }
+        
+        [holder removeAllObjects];
+        begin = CACurrentMediaTime();
+        @autoreleasepool {
+            for (int i = 0; i < count; i++) {
+                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:feed];
+                [holder addObject:data];
+            }
+        }
+        end = CACurrentMediaTime();
+        printf("%8.2f\n", (end - begin) * 1000);
+    }
+    
+    /*------------------- XZJSON -------------------*/
+    {
+        [holder removeAllObjects];
+        begin = CACurrentMediaTime();
+        @autoreleasepool {
+            for (int i = 0; i < count; i++) {
+                XZWeiboStatus *feed = [XZJSON decode:json options:kNilOptions class:[XZWeiboStatus class]];
+                [holder addObject:feed];
+            }
+        }
+        end = CACurrentMediaTime();
+        printf("XZJSON:          %8.2f   ", (end - begin) * 1000);
+
+        
+        XZWeiboStatus *feed = [XZJSON decode:json options:kNilOptions class:[XZWeiboStatus class]];
+        [holder removeAllObjects];
+        begin = CACurrentMediaTime();
+        @autoreleasepool {
+            for (int i = 0; i < count; i++) {
+                NSMutableDictionary *json = [NSMutableDictionary dictionary];
+                [XZJSON model:feed encodeIntoDictionary:json];
+                [holder addObject:json];
+            }
+        }
+        end = CACurrentMediaTime();
+        
+        NSMutableDictionary *json = [NSMutableDictionary dictionary];
+        [XZJSON model:feed encodeIntoDictionary:json];
+        if ([NSJSONSerialization isValidJSONObject:json]) {
+            printf("%8.2f   ", (end - begin) * 1000);
+        } else {
+            printf("   error   ");
+        }
+        
         
         [holder removeAllObjects];
         begin = CACurrentMediaTime();

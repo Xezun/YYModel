@@ -126,3 +126,72 @@ YYModelSynthCoderAndHash
 }
 YYModelSynthCoderAndHash
 @end
+
+@implementation XZWeiboStatus
+
++ (NSDictionary<NSString *,id> *)mappingJSONCodingKeys {
+    return @{@"statusID" : @"id",
+             @"createdAt" : @"created_at",
+             @"attitudesStatus" : @"attitudes_status",
+             @"inReplyToScreenName" : @"in_reply_to_screen_name",
+             @"sourceType" : @"source_type",
+             @"commentsCount" : @"comments_count",
+             @"recomState" : @"recom_state",
+             @"urlStruct" : @"url_struct",
+             @"sourceAllowClick" : @"source_allowclick",
+             @"bizFeature" : @"biz_feature",
+             @"mblogTypeName" : @"mblogtypename",
+             @"mblogType" : @"mblogtype",
+             @"inReplyToStatusId" : @"in_reply_to_status_id",
+             @"picIds" : @"pic_ids",
+             @"repostsCount" : @"reposts_count",
+             @"attitudesCount" : @"attitudes_count",
+             @"darwinTags" : @"darwin_tags",
+             @"userType" : @"userType",
+             @"picInfos" : @"pic_infos",
+             @"inReplyToUserId" : @"in_reply_to_user_id"};
+}
++ (NSDictionary<NSString *,id> *)mappingJSONCodingClasses {
+    return @{@"picIds" : [NSString class],
+             @"picInfos" : [YYWeiboPicture class],
+             @"urlStruct" : [YYWeiboURL class]};
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super init];
+    if (self) {
+        [XZJSON model:self decodeWithCoder:coder];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+    [XZJSON model:self encodeWithCoder:coder];
+}
+
+- (BOOL)isEqual:(id)object {
+    return [XZJSON model:self isEqualToModel:object comparator:nil];
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    return [XZJSON model:self copy:^BOOL(id  _Nonnull newModel, NSString * _Nonnull key) {
+        return NO;
+    }];
+}
+
+- (BOOL)JSONDecodeValue:(id)value forKey:(NSString *)key {
+    if ([key isEqualToString:@"createdAt"]) {
+        if ([value isKindOfClass:NSString.class]) {
+            static NSDateFormatter *formatter = nil;
+            if (formatter == nil) {
+                formatter = [[NSDateFormatter alloc] init];
+                formatter.dateFormat = @"%a %b %d %H:%M:%S %z %Y";
+            }
+            self.createdAt = [formatter dateFromString:value];
+        }
+        return YES;
+    }
+    return NO;
+}
+
+@end

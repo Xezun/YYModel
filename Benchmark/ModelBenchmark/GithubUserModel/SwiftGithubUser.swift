@@ -109,7 +109,7 @@ extension GithubUserObjectMapper {
         
         
         print("SwiftyJSON(#):      ", separator: "", terminator: "")
-        let swiftJson = JSON(data: data)
+        let swiftJson = try? JSON(data: data)
         start = CACurrentMediaTime()
         for _ in 1...10000 {
             _ = GithubUserSwifty(fromJson: swiftJson)
