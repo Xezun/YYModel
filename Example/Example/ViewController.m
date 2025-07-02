@@ -15,7 +15,7 @@
 #import "MTWeiboModel.h"
 #import "JSWeiboModel.h"
 #import "MJWeiboModel.h"
-#import "ModelBenchmark-Swift.h"
+#import "Example-Swift.h"
 @import XZJSON;
 
 @implementation ViewController
@@ -106,7 +106,7 @@
         @autoreleasepool {
             for (int i = 0; i < count; i++) {
                 NSData *data = [NSJSONSerialization dataWithJSONObject:json options:kNilOptions error:nil];
-                [holder addObject:json];
+                [holder addObject:data];
             }
         }
         end = CACurrentMediaTime();

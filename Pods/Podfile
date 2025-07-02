@@ -1,29 +1,35 @@
-platform :ios, '15.0'
+platform :ios, '13.0'
 use_frameworks!
 use_modular_headers!
 
-target 'ModelBenchmark' do
+#inhibit_all_warnings!
 
-# Objective-C
-pod 'FastEasyMapping'
-pod 'JSONModel'
-pod 'Mantle'
-pod 'MJExtension'
-pod 'YYModel'
+workspace '../Example.xcworkspace'
+project   '../Example/Example.xcodeproj'
 
-# Swift
-pod 'Argo'
-pod 'Gloss'
-pod 'HandyJSON'
-pod 'ObjectMapper'
-pod 'SwiftyJSON'
-pod 'XZJSON'
-pod 'XZObjcDescriptor'
 
-# Generator
-# https://github.com/Ahmed-Ali/JSONExport
-# https://github.com/nixzhu/Coolie
-# https://github.com/johnlui/JSONNeverDie
+target 'Example' do
+
+  # Objective-C
+  pod 'FastEasyMapping'
+  pod 'JSONModel'
+  pod 'Mantle'
+  pod 'MJExtension'
+  pod 'YYModel', :path => '../'
+
+  # Swift
+  pod 'Argo'
+  pod 'Gloss'
+  pod 'HandyJSON'
+  pod 'ObjectMapper'
+  pod 'SwiftyJSON'
+  pod 'XZJSON'
+  pod 'XZObjcDescriptor'
+
+  # Generator
+  # https://github.com/Ahmed-Ali/JSONExport
+  # https://github.com/nixzhu/Coolie
+  # https://github.com/johnlui/JSONNeverDie
 
 end
 

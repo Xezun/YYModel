@@ -16,8 +16,8 @@ let package = Package(
             name: "YYModel",
             dependencies: [],
             path: "YYModel",
-            sources: ["Code/ObjC"],
-            publicHeadersPath: "Code/ObjC"
+            sources: ["Code"],
+            publicHeadersPath: "Code"
         )
     ]
 )

@@ -13,7 +13,6 @@ import ObjectMapper
 import HandyJSON
 import SwiftyJSON
 
-
 extension GithubUserObjectMapper {
     static func benchmark() {
         
